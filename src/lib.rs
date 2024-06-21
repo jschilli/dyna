@@ -4,7 +4,7 @@ use anyhow::Context;
 use component::dyna::{dynamic_component, wit};
 
 wasmtime::component::bindgen!({
-    // trappable_imports: true,
+    trappable_imports: true,
     with: {
         "component:dyna/dynamic-component/engine": Engine,
         "component:dyna/dynamic-component/component": ComponentState,
@@ -217,9 +217,7 @@ impl ComponentState {
                 dynamic_component::Val::String(s) => wasmtime::component::Val::String(s.into()),
             })
             .collect::<Vec<_>>();
-        let mut result = [wasmtime::component::Val::String(
-            String::from("").into_boxed_str(),
-        )];
+        let mut result = [wasmtime::component::Val::String(String::from(""))];
         func.call(&mut self.store, &params, &mut result)
             .expect("TODO: other error");
         Ok(result
