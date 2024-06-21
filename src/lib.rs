@@ -4,6 +4,7 @@ use anyhow::Context;
 use component::dyna::{dynamic_component, wit};
 
 wasmtime::component::bindgen!({
+    // trappable_imports: true,
     with: {
         "component:dyna/dynamic-component/engine": Engine,
         "component:dyna/dynamic-component/component": ComponentState,
@@ -244,7 +245,7 @@ impl Resolver {
             .exports
             .iter()
             .map(|(key, item)| match item {
-                wit_parser::WorldItem::Interface(i) => {
+                wit_parser::WorldItem::Interface { id: i, .. } => {
                     let interface = self.resolve.interfaces.get(*i).unwrap();
                     let name = match key {
                         wit_parser::WorldKey::Name(name) => name,
